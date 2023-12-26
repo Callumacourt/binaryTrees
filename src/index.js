@@ -107,23 +107,52 @@ class Tree {
   }
 
   levelOrder(callback) {
-    const queue = this.root;
+    if (!this.root) {
+      return;
+    }
+
+    const queue = [this.root];
     const visitedNodes = [];
 
-    while (queue.length != 0) {
-      const node = queue.pop();
-      console.log(node.val);
+    while (queue.length !== 0) {
+      const node = queue.shift();
+      console.log(node.value);
       visitedNodes.push(node);
+
       if (node.left) {
-        queue.unshift(node.left);
+        queue.push(node.left);
       }
       if (node.right) {
-        queue.unshift(node.right);
+        queue.push(node.right);
       }
     }
-    return callback(visitedNodes);
+    callback(visitedNodes);
+  }
+
+  inOrder(node) {
+    if (node === null) {
+      return [];
+    }
+
+    const treeArray = [];
+
+    if (node.left) {
+      treeArray.push(...this.inOrder(node.left));
+    }
+
+    treeArray.push(node.value);
+
+    if (node.right) {
+      treeArray.push(...this.inOrder(node.right));
+    }
+
+    return treeArray;
   }
 }
 
 const testArray = [1, 2, 3, 4, 5, 6, 7, 9];
 const testTree = new Tree(testArray);
+const testFunc = node => {
+  console.log(node.value + 1);
+};
+testTree.levelOrder(testFunc);
