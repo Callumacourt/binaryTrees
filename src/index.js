@@ -148,6 +148,22 @@ class Tree {
 
     return treeArray;
   }
+
+  postOrder(node) {
+    if (node === null) {
+      return [];
+    }
+    const treeArray = [];
+
+    if (node.left) {
+      treeArray.push(...this.postOrder(node.left));
+    }
+    if (node.right) {
+      treeArray.push(...this.postOrder(node.right));
+    }
+    treeArray.push(node.value);
+    return treeArray;
+  }
 }
 
 const testArray = [1, 2, 3, 4, 5, 6, 7, 9];
