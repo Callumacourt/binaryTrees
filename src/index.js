@@ -164,6 +164,17 @@ class Tree {
     treeArray.push(node.value);
     return treeArray;
   }
+
+  height(node) {
+    if (node === null) {
+      return -1;
+    }
+
+    const leftHeight = this.height(node.left);
+    const rightHeight = this.height(node.right);
+
+    return Math.max(leftHeight, rightHeight) + 1;
+  }
 }
 
 const testArray = [1, 2, 3, 4, 5, 6, 7, 9];
@@ -172,3 +183,5 @@ const testFunc = node => {
   console.log(node.value + 1);
 };
 testTree.levelOrder(testFunc);
+
+testTree.height(2);
