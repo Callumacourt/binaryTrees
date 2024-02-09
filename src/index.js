@@ -115,4 +115,23 @@ class Tree {
 
     return root;
   }
+
+  find(value) {
+    if (!this.root) {
+      return false;
+    }
+    let currentNode = this.root;
+    while (currentNode) {
+      if (value === currentNode.value) {
+        return true;  // Value found
+      } else if (value > currentNode.value) {
+        currentNode = currentNode.right;
+      } else {
+        currentNode = currentNode.left;
+      }
+    }
+    return false;  // Value not found
+  }
+  
+  }
 }
