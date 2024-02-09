@@ -123,15 +123,37 @@ class Tree {
     let currentNode = this.root;
     while (currentNode) {
       if (value === currentNode.value) {
-        return true;  // Value found
+        return true; // Value found
       } else if (value > currentNode.value) {
         currentNode = currentNode.right;
       } else {
         currentNode = currentNode.left;
       }
     }
-    return false;  // Value not found
+    return false; // Value not found
   }
-  
+
+  levelOrder(callback) {
+    if (!this.root) {
+      throw new Error('Tree is empty');
+    }
+
+    const queue = [];
+    let currentNode;
+
+    queue.push(this.root);
+
+    while (queue.length > 0) {
+      currentNode = queue.shift();
+
+      if (currentNode.left !== null) {
+        queue.push(currentNode.left);
+      }
+      if (currentNode.right !== null) {
+        queue.push(currentNode.right);
+      }
+
+      callback(currentNode);
+    }
   }
 }
