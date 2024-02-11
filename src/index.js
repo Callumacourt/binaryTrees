@@ -204,4 +204,30 @@ class Tree {
 
     callback(root);
   }
+
+  height(node) {
+    if (!node) {
+      return -1;
+    }
+
+    let currentNode = this.root;
+    let height = 0;
+
+    while (currentNode) {
+      if (node.value === currentNode.value) {
+        return height;
+      }
+
+      if (node.value < currentNode.value) {
+        currentNode = currentNode.left;
+      } else {
+        currentNode = currentNode.right;
+      }
+
+      height += 1;
+    }
+
+    // Node not found
+    return -1;
+  }
 }
