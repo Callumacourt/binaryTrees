@@ -156,4 +156,24 @@ class Tree {
       callback(currentNode);
     }
   }
+
+  inOrder(callback) {
+    if (!this.root) {
+      throw new Error('No root');
+    }
+
+    const stack = [];
+    let current = this.root;
+
+    while (current || stack.length > 0) {
+      while (current) {
+        stack.push(current);
+        current = current.left;
+      }
+
+      current = stack.pop();
+      callback(current);
+      current = current.right;
+    }
+  }
 }
