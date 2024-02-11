@@ -157,32 +157,51 @@ class Tree {
     }
   }
 
-  inOrder(callback) {
-    if (!this.root) {
-      throw new Error('No root');
-    }
-
-    const stack = [];
-    let current = this.root;
-
-    while (current || stack.length > 0) {
-      while (current) {
-        stack.push(current);
-        current = current.left;
-      }
-
-      current = stack.pop();
-      callback(current);
-      current = current.right;
-    }
-  }
-  preorder(callback, root = this.root) {
+  inOrder(callback, root) {
     if (!root) {
       return;
     }
 
+    if (root.left) {
+      this.inOrder(callback, root.left);
+    }
+
     callback(root);
-    this.preorder(callback, root.left);
-    this.preorder(callback, root.right);
+
+    if (root.right) {
+      this.inOrder(callback, root.right);
+    }
+  }
+
+  preorder(callback, root = this.root) {
+    if (!root) {
+      throw new Error('Invalid root: null');
+    }
+
+    callback(root);
+
+    if (root.left) {
+      this.preorder(callback, root.left);
+    }
+
+    if (root.right) {
+      this.preorder(callback, root.right);
+    }
+  }
+
+  postOrder(callback, root) {
+    if (!root) {
+      throw new Error('Invalid root: null');
+    }
+
+    if (root.left) {
+      this.postOrder(callback, root.left);
+    }
+
+    if (root.right) {
+      this.postOrder(callback, root.right);
+    }
+
+    callback(root);
   }
 }
