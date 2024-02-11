@@ -176,4 +176,13 @@ class Tree {
       current = current.right;
     }
   }
+  preorder(callback, root = this.root) {
+    if (!root) {
+      return;
+    }
+
+    callback(root);
+    this.preorder(callback, root.left);
+    this.preorder(callback, root.right);
+  }
 }
