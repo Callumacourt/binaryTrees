@@ -7,6 +7,7 @@ class Node {
     this.right = null;
   }
 }
+
 class Tree {
   constructor(arr) {
     // Sort and remove duplicates from the input array
@@ -62,7 +63,7 @@ class Tree {
 
   delete(value) {
     let parentNode = null;
-    let currentNode = root;
+    let currentNode = this.root;
 
     while (currentNode !== null && value !== currentNode.value) {
       parentNode = currentNode;
@@ -71,13 +72,13 @@ class Tree {
     }
 
     if (currentNode === null) {
-      return root; // Value not found, nothing to delete
+      return this.root; // Value not found, nothing to delete
     }
 
     if (!currentNode.left && !currentNode.right) {
       // Node is a leaf node
       if (!parentNode) {
-        root = null;
+        this.root = null;
       } else {
         parentNode.left === currentNode
           ? (parentNode.left = null)
@@ -88,7 +89,7 @@ class Tree {
       let childNode = currentNode.left || currentNode.right;
 
       if (!parentNode) {
-        root = childNode;
+        this.root = childNode;
       } else {
         parentNode.left === currentNode
           ? (parentNode.left = childNode)
@@ -113,7 +114,7 @@ class Tree {
       }
     }
 
-    return root;
+    return this.root;
   }
 
   find(value) {
@@ -157,7 +158,7 @@ class Tree {
     }
   }
 
-  inOrder(callback, root) {
+  inOrder(callback, root = this.root) {
     if (!root) {
       return;
     }
@@ -189,7 +190,7 @@ class Tree {
     }
   }
 
-  postOrder(callback, root) {
+  postOrder(callback, root = this.root) {
     if (!root) {
       throw new Error('Invalid root: null');
     }
@@ -215,7 +216,7 @@ class Tree {
 
     while (currentNode) {
       if (node.value === currentNode.value) {
-        return height;
+        return depth;
       }
 
       if (node.value < currentNode.value) {
@@ -242,14 +243,14 @@ class Tree {
     return Math.max(leftHeight, rightHeight) + 1;
   }
 
-  isBalanced(node) {
+  isBalanced(node = this.root) {
     if (!node) {
       return true; // An empty subtree is balanced
     }
 
     // Calculate the height of the left and right subtrees
-    const leftHeight = height(node.left);
-    const rightHeight = height(node.right);
+    const leftHeight = this.height(node.left);
+    const rightHeight = this.height(node.right);
 
     // Check if the current node is balanced
     if (Math.abs(leftHeight - rightHeight) > 1) {
@@ -257,6 +258,52 @@ class Tree {
     }
 
     // Recursively check the balance for left and right subtrees
-    return isBalanced(node.left) && isBalanced(node.right);
+    return this.isBalanced(node.left) && this.isBalanced(node.right);
+  }
+
+  reBalance() {
+    if (this.isBalanced()) {
+      console.log('Tree is already balanced.');
+      return;
+    }
+
+    // Step 1: Traverse the tree and collect nodes into an array using in-order traversal
+    const nodes = [];
+    this.inOrder(node => nodes.push(node));
+
+    // Step 2: Build a new balanced tree using the collected nodes
+    const balancedTree = this.buildTreeFromArray(nodes);
+
+    // Step 3: Update the original tree's root with the root of the balanced tree
+    this.root = balancedTree;
+  }
+
+  buildTreeFromArray(nodes) {
+    // Recursive function to build a balanced tree from an array of nodes
+    const buildTree = (start, end) => {
+      if (start > end) {
+        return null;
+      }
+
+      const mid = Math.floor((start + end) / 2);
+      const node = nodes[mid];
+
+      node.left = buildTree(start, mid - 1);
+      node.right = buildTree(mid + 1, end);
+
+      return node;
+    };
+
+    // Call the recursive function to build the tree
+    return buildTree(0, nodes.length - 1);
   }
 }
+
+const tree = new Tree([10, 20, 22, 30, 40, 50, 54]);
+tree.isBalanced();
+tree.levelOrder();
+tree.postOrder();
+tree.preorder();
+tree.insert(140);
+tree.insert(150);
+tree.reBalance();
