@@ -205,13 +205,13 @@ class Tree {
     callback(root);
   }
 
-  height(node) {
+  depth(node) {
     if (!node) {
       return -1;
     }
 
     let currentNode = this.root;
-    let height = 0;
+    let depth = 0;
 
     while (currentNode) {
       if (node.value === currentNode.value) {
@@ -224,10 +224,39 @@ class Tree {
         currentNode = currentNode.right;
       }
 
-      height += 1;
+      depth += 1;
     }
 
     // Node not found
     return -1;
+  }
+
+  height(node) {
+    if (!node) {
+      return -1; // Height of an empty subtree is -1 by convention
+    }
+
+    const leftHeight = this.height(node.left);
+    const rightHeight = this.height(node.right);
+
+    return Math.max(leftHeight, rightHeight) + 1;
+  }
+
+  isBalanced(node) {
+    if (!node) {
+      return true; // An empty subtree is balanced
+    }
+
+    // Calculate the height of the left and right subtrees
+    const leftHeight = height(node.left);
+    const rightHeight = height(node.right);
+
+    // Check if the current node is balanced
+    if (Math.abs(leftHeight - rightHeight) > 1) {
+      return false;
+    }
+
+    // Recursively check the balance for left and right subtrees
+    return isBalanced(node.left) && isBalanced(node.right);
   }
 }
